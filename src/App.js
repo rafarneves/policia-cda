@@ -1,57 +1,40 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const App = () => {
+  const [codigo, setCodigo] = useState([])
+  const [usuarios, setUsuarios] = useState([])
+  const [status, setStatus] = useState([])
 
-const colunas = [
-  {
-    dataField: 'id',
-    text: 'ID'
-  },
-  {
-    dataField: 'nome',
-    text: 'Nome'
-  },
-  {
-    dataField: 'senha',
-    text: 'Senha'
-  }
-];
-
-class App extends React.Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      codigo: [],
-      usuarios: [],
-      coluns: colunas
-    }
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     axios.get('https://my-json-server.typicode.com/cidadealta/exercise/db')
-      .then(data  => {
-        const codigo = data.data.codigopenal;
-        const usuarios = data.data.usuarios;
-        this.setState({ codigo, usuarios });
+      .then(data => {
+        setCodigo(data.data.codigopenal)
+        setUsuarios(data.data.usuarios)
+        setStatus(data.data.status)
       })
-  }
+  }, [])
 
-  render() {
-    const { codigo, usuarios } = this.state
-    return (
-      <div>
-        {codigo.map(item => 
-          <li>{item.nome}</li>
-        )}
-        <br />
-        {usuarios.map(item => 
-          <li>{item.nome}</li>
-        )}
-      </div>
-    )
-  }
+  return (
+    <div>
+      {codigo.map(item =>
+        <li>{item.nome}</li>
+      )}
+
+      <br />
+
+      {usuarios.map(item =>
+        <li>{item.nome}</li>
+      )}
+
+      <br />
+
+      {status.map(item =>
+        <li>Descrição: {item.descricao}</li>
+      )}
+    </div>
+  )
 }
 
 export default App;
