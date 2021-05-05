@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -24,41 +23,32 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      data: [],
+      codigo: [],
+      usuarios: [],
       coluns: colunas
     }
   }
 
   componentDidMount() {
-    axios.get('https://my-json-server.typicode.com/cidadealta/exercise/usuarios')
-      .then(({ data }) => {
-        this.setState({ data })
+    axios.get('https://my-json-server.typicode.com/cidadealta/exercise/db')
+      .then(data  => {
+        const codigo = data.data.codigopenal;
+        const usuarios = data.data.usuarios;
+        this.setState({ codigo, usuarios });
       })
   }
 
   render() {
-    const { data, coluns } = this.state
+    const { codigo, usuarios } = this.state
     return (
       <div>
-        <Table bordered responsive>
-          <thead>
-            <tr>
-              {coluns.map(key =>
-                <th style={{textAlign: 'left'}}>{key.text}</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => 
-              <tr>
-                <td key={index}>{item.id}</td>
-                <td key={index}>{item.nome}</td>
-                <td key={index}>{item.senha}</td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-        
+        {codigo.map(item => 
+          <li>{item.nome}</li>
+        )}
+        <br />
+        {usuarios.map(item => 
+          <li>{item.nome}</li>
+        )}
       </div>
     )
   }
